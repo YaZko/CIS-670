@@ -1,0 +1,105 @@
+* General goal
+  Define a model for the simply typed lambda calculus equipped with a recursion operator, in Coq
+
+* High level design choices
+  The development should be /effective/.
+  
+  This takes two meanings. 
+  First, the meta-logic itself should be effective, i.e. we
+  restrict ourself to the vanilla, constructivist, CIC.
+  Second, we define effective constructions in our domain theory.
+
+* Mathematical material covered
+
+** Elementary category theory
+   To discuss whether we shy away from it or not.
+
+** CPOs
+
+** Plotkin orders
+
+** Powerdomains
+
+** Recursive Domain Equations
+
+* Interesting technical points
+
+** Preorder vs Partial Order
+   
+   This kind of theory is usually built upon partial orders. However, in order to
+   leverage Coq's /setoid rewrite/ facility, we work over preorder instead.
+
+** Finite sets
+   Finite sets are simply represented as lists here.
+   Interesting note: the notion of finite set is non-trivial in constructive mathematics.
+   Several equivalent classic caracterisations are non-equivalent, see
+   https://platyblog.github.io/post/streamless/ 
+
+** Coinductive vs Enumerable Sets
+   
+** Canonical structures vs Type classes vs Modules
+   Dockins uses canonical structures. Could be interesting to cover these notions.
+   Related: use of coercions
+
+** inh_h
+   He introduces a trick to unify definitions of pointed and unpointed
+   alternatives of constructions.
+
+** Limits: System F
+   Type polymorphism cannot be detoned with this material. Why? What would be needed?
+
+** Recursive function theory for free
+   Developping an effective theory means that we can inherit Coq's support for recursive functions
+
+* Current major questions
+
+** Plotkin order
+   How does it compare to CPOs? Get a better understanding
+
+** Profinite domain
+   What the hell are they? Despite being "well known", no result on Google
+
+** Fixpoint resolution
+   Last section, to get a better understanding
+
+** Effectiveness
+   What does the second notion of effectiveness really means?
+
+** Limits
+   Understanding how to denote additionnal features
+
+* Table of Content: first draft
+
+** Introduction
+  
+*** Why would domain theory in Coq be interesting to have?
+    Basic tool to define a denotational semantic of formal lanugages.
+    First step to define denotational-based reasoning tools over these languages.
+
+*** Effectiveness
+    A philosophical statement with concrete side-effects
+
+** CPOs
+   
+   We have seen them a first time, let's see if we can directly write down the Winskell in Coq.
+*** How do we represent them?
+**** Preorder
+**** Enumerable sets
+**** inh_h
+*** How do we make this work in practice in Coq?
+**** Canonical Structures
+**** Coercions
+**** Setoid rewrites (annoying co-dependency with the choice of preorders)
+
+** Plotkin orders
+
+   Need to get a better understanding to be able to motivate them
+
+** Recursive Domain Equations
+
+   Need to get a better understanding to be able to motivate them
+
+** Domain for lam_rec
+
+   We are able to denote a small language!!
+   We can start having fun, operational semantics and proof of equivalence, logical relation
