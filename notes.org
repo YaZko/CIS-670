@@ -29,11 +29,44 @@
    This kind of theory is usually built upon partial orders. However, in order to
    leverage Coq's /setoid rewrite/ facility, we work over preorder instead.
 
+*** Explainations
+    
+    A /preorder/ is a type equipped with a reflexive, transitive relation (i.e.
+    not necessarily symmetric, in contrast with the case of /partial orders/).
+    
+    The rational is to be able to naturally derive a /setoid/, i.e. a type
+    equipped with an equivalence relation. Setoids are interesting when working
+    with Coq: they are well-supported to facilitate rewrites of their underlying
+    relation. The mathematical usual pendant, quotients, are not natively
+    supported.
+
+    Remains to see two things: one, the relation between preoders and setoids;
+    two, how to recover the partial order that we really are concerned with.
+
+    Given a preoder, we can easily derive a setoid: two elements are equivalent
+    if they are smaller one from another. We then make sure to identify such
+    elements in the remaining of the development (see setoïd rewrite).
+
+    However, now that we have identified these equivalent elements, we get 
+    back antisymmetry, and hence a partial order.
+
 ** Finite sets
-   Finite sets are simply represented as lists here.
-   Interesting note: the notion of finite set is non-trivial in constructive mathematics.
-   Several equivalent classic caracterisations are non-equivalent, see
-   https://platyblog.github.io/post/streamless/ 
+
+   Finite sets are simply represented as lists here, i.e. so-called enumerated
+   sets according to Coquand/Spiwack:
+   http://assert-false.net/arnaud/papers/Constructively%20Finite.pdf
+  
+   Interesting note on this paper: shows that the notion of finite set is
+   non-trivial in constructive mathematics. Several equivalent classic
+   caracterisations are non-equivalent, see also
+   https://platyblog.github.io/post/streamless/
+
+   Advantage of enumerated sets: very strong notion of finiteness. In particular,
+   it is decidable whether they are inhabited!
+
+   Here however we once again work up to equivalence:
+   x ∈ l ::= ∃ x', In x' l ∧ x' ≈ x
+   Is it still decidable? Do we care?
 
 ** Coinductive vs Enumerable Sets
    
