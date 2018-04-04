@@ -50,6 +50,11 @@
     However, now that we have identified these equivalent elements, we get 
     back antisymmetry, and hence a partial order.
 
+*** Effective preorder
+
+    A preorder is said to be effective if it comes with an enumerable set
+    containing its carrier, as well as a decision procedure for its order.
+
 ** Finite sets
 
    Finite sets are simply represented as lists here, i.e. so-called enumerated
@@ -69,14 +74,40 @@
    Is it still decidable? Do we care?
 
 ** Coinductive vs Enumerable Sets
-   
+
+   Enumerable sets are defined as partial functions from nat, i.e. /nat -> option A/.
+   Note that classical finite sets are included in these enuremable sets. However,
+   given an enumerable set, it is not decidable whether it has a finite number of 
+   elements.
+  
+   Intuition: enumerable sets correspond to the recursively enumerable sets.
+
+   The whole development works exclusively over these enumerable sets, which
+   is instrumental in achieving effectiveness.
+ 
 ** Canonical structures vs Type classes vs Modules
    Dockins uses canonical structures. Could be interesting to cover these notions.
    Related: use of coercions
 
 ** inh_h
-   He introduces a trick to unify definitions of pointed and unpointed
+
+   We introduce a trick to unify definitions of pointed and unpointed
    alternatives of constructions.
+
+   A pointed ordered structure is one which admis a least element, as opposed to
+   an unpointed one. This distinction applies to CPOs, Scott-continuous
+   functions as well as profinite domains.
+
+   The predicate /inh_h/, for /inhabited conditionned by the boolean h/,
+   provides a uniform way to capture this notion.
+   
+   Essentially, each concept will be defined by quantification over all finite
+   sets. The difference between being pointed or not will depend on whether or
+   not the empty list is considered in this quantification.
+
+   Definitions will therefore be parameterized by a boolean, and quantification
+   performed upon conditionally inhabited finite sets:
+   /inh_h l ::= (h = false ∨ ∃ x, x ∈ l)/
 
 ** Limits: System F
    Type polymorphism cannot be detoned with this material. Why? What would be needed?
