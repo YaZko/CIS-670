@@ -103,3 +103,16 @@
 
    We are able to denote a small language!!
    We can start having fun, operational semantics and proof of equivalence, logical relation
+* References
+** Main paper 
+*** Formalized, Effective Domain Theory in Coq
+    Robert Dockins
+    ITP'14
+** Canonical structures
+*** Canonical Structures for the working Coq user
+    Assia Mahboubi, Enrico Tassi
+    ITP'13
+*** How to make ad hoc proof automation less ad hoc 
+    Georges Gonthier, Beta Ziliani, Aleksandar Nanevski, and Derek Dreyer
+    ICFP'11
+*** https://coq.inria.fr/refman/canonical-structures.html 
