@@ -134,6 +134,12 @@
    Ongoing: see Gunter's thesis, a local product from the 80's
    ftp://ftp.cis.upenn.edu/pub/papers/gunter/th85.pdf.Z
 
+   From the introduction, they are:
+   «Let D be a CPO and let M_D be the set of continuous functions p: D → D such that
+   p ∘ p ⊑ id_D and the image of p is finite. Then D is said to be /profinite/ if M_D
+   is directed and ⊔M_D = id_D.»
+   Might have to sleep on this one before fully grasping it.
+
 ** TODO Fixpoint resolution
    Last section, to get a better understanding
 
