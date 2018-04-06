@@ -10,7 +10,7 @@
   restrict ourself to the vanilla, constructivist, CIC.
   Second, we define effective constructions in our domain theory.
 
-
+  
 * Mathematical material covered
 
 ** Elementary category theory
@@ -33,8 +33,14 @@
 
 * Interesting technical points
 
-** Preorder vs Partial Order
-   
+** Introduction 
+   -> Effectiveness
+*** Recursive function theory for free
+    Developping an effective theory means that we can inherit Coq's support for recursive functions
+** Preorder vs Partial Order (Yannick)
+  
+   -> Deriving a partial order from preorder
+ 
    This kind of theory is usually built upon partial orders. However, in order to
    leverage Coq's /setoid rewrite/ facility, we work over preorder instead.
 
@@ -64,7 +70,7 @@
     A preorder is said to be effective if it comes with an enumerable set
     containing its carrier, as well as a decision procedure for its order.
 
-** Finite sets
+** Finite sets (Yannick)
 
    Finite sets are simply represented as lists here, i.e. so-called enumerated
    sets according to Coquand/Spiwack:
@@ -82,7 +88,7 @@
    x ∈ l ::= ∃ x', In x' l ∧ x' ≈ x
    Is it still decidable? Do we care?
 
-** Coinductive vs Enumerable Sets
+** Coinductive vs Enumerable Sets (Yao)
 
    Enumerable sets are defined as partial functions from nat, i.e. /nat -> option A/.
    Note that classical finite sets are included in these enuremable sets. However,
@@ -93,10 +99,11 @@
 
    The whole development works exclusively over these enumerable sets, which
    is instrumental in achieving effectiveness.
- 
-** Canonical structures vs Type classes vs Modules
+** Canonical structures vs Type classes vs Modules (Yao)
    Dockins uses canonical structures. Could be interesting to cover these notions.
    Related: use of coercions
+ 
+** Algebraic domains (Yannick)
 
 ** inh_h
 
@@ -120,10 +127,7 @@
 
 ** Limits: System F
    Type polymorphism cannot be detoned with this material. Why? What would be needed?
-
-** Recursive function theory for free
-   Developping an effective theory means that we can inherit Coq's support for recursive functions
-
+** Recursive domain equation
 
 * Current major questions
 
@@ -186,6 +190,81 @@
 
    We are able to denote a small language!!
    We can start having fun, operational semantics and proof of equivalence, logical relation
+
+* Table of content: second draft
+
+** Introduction 
+   -> Effectiveness
+*** Recursive function theory for free
+    Developping an effective theory means that we can inherit Coq's support for recursive functions
+** Preorder vs Partial Order (Yannick)
+  
+   -> Deriving a partial order from preorder
+ 
+   This kind of theory is usually built upon partial orders. However, in order to
+   leverage Coq's /setoid rewrite/ facility, we work over preorder instead.
+
+*** Explainations
+    
+    A /preorder/ is a type equipped with a reflexive, transitive relation (i.e.
+    not necessarily symmetric, in contrast with the case of /partial orders/).
+    
+    The rational is to be able to naturally derive a /setoid/, i.e. a type
+    equipped with an equivalence relation. Setoids are interesting when working
+    with Coq: they are well-supported to facilitate rewrites of their underlying
+    relation. The mathematical usual pendant, quotients, are not natively
+    supported.
+
+    Remains to see two things: one, the relation between preoders and setoids;
+    two, how to recover the partial order that we really are concerned with.
+
+    Given a preoder, we can easily derive a setoid: two elements are equivalent
+    if they are smaller one from another. We then make sure to identify such
+    elements in the remaining of the development (see setoïd rewrite).
+
+    However, now that we have identified these equivalent elements, we get 
+    back antisymmetry, and hence a partial order.
+
+*** Effective preorder
+
+    A preorder is said to be effective if it comes with an enumerable set
+    containing its carrier, as well as a decision procedure for its order.
+
+** Finite sets (Yannick)
+
+   Finite sets are simply represented as lists here, i.e. so-called enumerated
+   sets according to Coquand/Spiwack:
+   http://assert-false.net/arnaud/papers/Constructively%20Finite.pdf
+  
+   Interesting note on this paper: shows that the notion of finite set is
+   non-trivial in constructive mathematics. Several equivalent classic
+   caracterisations are non-equivalent, see also
+   https://platyblog.github.io/post/streamless/
+
+   Advantage of enumerated sets: very strong notion of finiteness. In particular,
+   it is decidable whether they are inhabited!
+
+   Here however we once again work up to equivalence:
+   x ∈ l ::= ∃ x', In x' l ∧ x' ≈ x
+   Is it still decidable? Do we care?
+
+** Coinductive vs Enumerable Sets (Yao)
+
+   Enumerable sets are defined as partial functions from nat, i.e. /nat -> option A/.
+   Note that classical finite sets are included in these enuremable sets. However,
+   given an enumerable set, it is not decidable whether it has a finite number of 
+   elements.
+  
+   Intuition: enumerable sets correspond to the recursively enumerable sets.
+
+   The whole development works exclusively over these enumerable sets, which
+   is instrumental in achieving effectiveness.
+** Canonical structures vs Type classes vs Modules (Yao)
+   Dockins uses canonical structures. Could be interesting to cover these notions.
+   Related: use of coercions
+ 
+** Algebraic domains (Yannick)
+
 
 * References
 ** Main paper 
