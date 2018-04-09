@@ -34,7 +34,7 @@ Open Scope Z_scope.
 Definition Z_abGrp : abGrp :=
   AbGrp Z 0 Z.opp Z.add Z.add_assoc Z.add_comm Z.add_0_l Z.add_opp_diag_l.
 
-Goal forall z, z + (- 0) = z.
+Goal forall z, z - 0 = z.
 Proof.
   Fail apply subr0.
 Abort.
@@ -44,7 +44,7 @@ Reset Z_abGrp.
 Canonical Structure Z_abGrp : abGrp :=
     AbGrp Z 0 Z.opp Z.add Z.add_assoc Z.add_comm Z.add_0_l Z.add_opp_diag_l.
 
-Goal forall z, z + (- 0) = z.
+Goal forall z, z - 0 = z.
 Proof.
   apply subr0.
 Qed.
