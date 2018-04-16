@@ -1,0 +1,220 @@
+** Preorder vs Partial Order 
+  
+   Domain theory is usually built upon partial orders. However, in order to
+   leverage Coq's /setoid rewrite/ facility, we work over preorder instead.
+
+*** Explanations
+    
+    A /preorder/ is a type equipped with a reflexive, transitive relation (i.e.
+    not necessarily symmetric, in contrast with the case of /partial orders/).
+    
+    The rational is to be able to naturally derive a /setoid/, i.e. a type
+    equipped with an equivalence relation. Setoids are interesting when working
+    with Coq: they are well-supported to facilitate rewrites of their underlying
+    relation. The mathematical usual pendant, quotients, are not natively
+    supported.
+
+    Remains to address two things: one, the relation between preoders and setoids;
+    two, how to recover the partial order that we really are concerned with.
+
+    Given a preoder, we can easily derive a setoid: two elements are equivalent
+    if they are smaller one from another. We then make sure to identify such
+    elements in the remaining of the development (see setoïd rewrite).
+
+    However, now that we have identified these equivalent elements, we get 
+    back antisymmetry, and hence a partial order.
+
+
+*** Effective preorder
+
+    A preorder is said to be effective if it comes with an enumerable set
+    containing its carrier, as well as a decision procedure for its order.
+
+
+** Rewriting in Coq
+
+*** Leibniz equality
+
+    The native equality in Coq is the so-called Leibniz one.
+    This equality is extremely strong, which is both a blessing and a curse:
+    it is extremely convenient, but is not very flexible.
+    
+    #+BEGIN_SRC coq
+    Inductive eq {A: Type} (x: A): A -> Prop := eq_refl: x = x.
+    #+END_SRC
+    
+    This equality expresses that two terms /x/ and /y/ are equal if and only if
+    every property on /A/ which is true of /x/ is also true of /y/.
+    Meaning that this equality is compatible with /any/ context, we therefore
+    can always rewrite such an equality in our proof term.
+   
+
+*** Beyond Leibniz: extending Coq's facilities related to /eq/
+
+    What if we want to identify other terms? One solution is to wait for the
+    HoTT guys and their Higher Inductive Types.
+    
+    Alternatively, one can use setoids, which really is nothing but a type and
+    an equivalence relation over it.
+
+**** Parametric relations
+
+     Parametric relations in general are terms of the type 
+   #+BEGIN_SRC coq
+   forall (x1:T1) …(xn:Tn), relation A.
+   #+END_SRC
+   ~A~ is the carrier of the relation, and depends on ~x1,..,xn~.
+
+   We can define parametric proofs of reflexivity, symmetry and transitivity
+   over such parametric relations.
+   Coq provides facilities to declare these proofs in order to extend the
+   ~reflexivity~, ~transitivity~ and ~symmetry~ tactics.
+
+   The general syntax is the following, in the case of a relation with a single parameter.
+   #+BEGIN_SRC coq
+   Add Parametric Relation (A: Type): A (@R A)
+   reflexivity proved by ...
+   symmetry proved by ...
+   transitivity proved by ...
+   as R_is_an_equivalence_relation.
+   #+END_SRC
+
+   And here is an example:
+   #+BEGIN_SRC coq
+   Axiom state: Type.
+   Definition Pred: state -> Prop.
+   Definition PEq (P1 P2: Pred): Prop := forall x, P1 x <-> P2 x.
+   Lemma PEq_reflexive: forall P, P ≡ P.
+   Proof.
+     intros P s; go.
+   Qed.
+
+   Lemma PEq_trans: forall P1 P2 P3 (H1: P1 ≡ P2) (H2: P2 ≡ P3),
+       P1 ≡ P3.
+     intros P1 P2 P3 H1 H2 s; split; intros H3; [apply H2, H1 | apply H1,H2]; assumption.
+   Qed.
+
+   Lemma PEq_symm: forall P1 P2 (H: P1 ≡ P2), P2 ≡ P1.
+   Proof.
+     intros P1 P2 H s; split; intros H'; apply H; assumption.
+   Qed.
+
+   Add Parametric Relation: Pred PEq
+       reflexivity proved by PEq_reflexive
+       symmetry proved by PEq_symm
+       transitivity proved by PEq_trans
+         as PEq_equiv.
+
+   #+END_SRC
+
+   We now are able to prove goals such that ~(forall P: Pred, PEq P P)~ with a
+   simpl (~intros P; reflexivity~). Same goes for ~transitivity~ and ~symmetry~.
+
+   Note that we can also only declare some of those properties, declaring that a
+   relation is a preorder for instance:
+
+   #+BEGIN_SRC coq
+   Definition PWeaker (P1 P2: Pred): Prop := forall s, P2 s -> P1 s.
+
+   Lemma PWeaker_reflexive: forall P, P ⊆ P.
+   Proof.
+     go.
+   Qed.
+
+   Lemma PWeaker_trans: forall P1 P2 P3 (H1: P1 ⊆ P2) (H2: P2 ⊆ P3), P1 ⊆ P3.
+   Proof.
+     intros P1 P2 P3 H1 H2 s H3; apply H1,H2,H3.
+   Qed.
+
+   Add Parametric Relation: Pred PWeaker
+       reflexivity proved by PWeaker_reflexive
+       transitivity proved by PWeaker_trans
+         as PWeaker_preorder.
+   #+END_SRC
+
+   In this case naturally ~symmetry~ will not work. Note that you are not
+   required to provide the appropriate proof term directly in the relation
+   declaration, you may use wildcards for coq to require the proofs
+   interactively.
+
+   Remark: What is really going on is a particular use of the typeclass
+   mechanism. All of this is simply syntactic sugar for an instance declaration
+   to the appropriate type class, Equivalence for example in the first case. We
+   could have written instead:
+
+   #+BEGIN_SRC coq
+   Require Import Classes.RelationClasses.
+
+   Instance PEq_equiv: @Equivalence Pred PEq :=
+    Equivalence_Reflexive := PEq_reflexive
+    Equivalence_Symmetric := PEq_symm
+    Equivalence_Transitive := PEq_trans.
+   #+END_SRC
+
+
+**** Rewrite: adding morphisms compatible with a parametric relation
+
+     One naturally cannot hope to replace a term in a goal by another one simply
+     related by a user-defined relation in general.
+     We will therefore need to provide proofs to extend the ~rewrite~ tactic: 
+     we should show that replacing a term by an equivalent one under a function 
+     respects our goal.
+     Assuming a binary function ~f~, the  general syntax is the following one.
+     #+BEGIN_SRC coq
+    Add Parametric Morphism : f with
+       signature (rel ==> rel ==> rel) as foo.
+     #+END_SRC
+
+     This cryptic syntax is to be read as follows:
+     Assuming two elements ~x1~ and ~x2~ related by ~rel~,
+     assuming two elements ~y1~ and ~y2~ related by ~rel~,
+     then ~f x1 y1~ and ~f x2 y2~ are related by ~rel~.
+     
+     To illustrate this, say we define the union of two predicates, we can
+     actually rewrite any equivalent predicates under it.
+
+     #+BEGIN_SRC coq
+
+    Require Import Setoid.
+    Definition PJoin P1 P2: Pred := λ s, P1 s \/ P2 s.
+    
+    Add Parametric Morphism : PJoin with
+       signature (PEq ==> PEq ==> PEq) as foo.
+    Proof.
+      intros Q1 Q1' eq1 Q2 Q2' eq2 s; split; intros H;
+        (destruct H; [left; apply eq1; assumption | right; apply eq2; assumption]).
+    Qed.
+
+     #+END_SRC
+
+    coq asked us to prove that if four predicates are pairwise PEquivalent, their
+    respective unions are PEquivalent. We therefore now are able to use the
+    tactic ~rewrite~ to rewrite PEquivalences under unions in goals.
+
+    Note: beware, we only proved the compatibility of PEq with respect to the
+    union!  coq will complain if we try to rewrite PEquivalence under any other
+    construction. The (Leibniz) equality has the peculiar property to be
+    compatible with any context by definition.  
+
+    Note bis: we have a very symmetric statement in the exemple using PEq
+    everywhere, but that is not necessary. We could for instance assert
+    compatibility only on the left by replacing the second PEq by an eq. An other
+    reason of uniformity in the example is that the codomain of the function
+    PJoin is the same as its arguments, but once again it could be otherwise. It
+    notably is common to end up in Prop and therefore be interested in a result
+    where the last PEq is replaced by iff: the proposition obtained after
+    rewriting is guaranteed to be equivalent.
+
+    Finally, as was the case with relations, we can instead explicitely declare
+    the adequate instance. The Typeclass at use here is Proper:
+   
+    #+BEGIN_SRC coq
+
+    Instance foo: Proper (PEq ==> PEq ==> PEq) PJoin.
+    Proof.
+      intros Q1 Q1' eq1 Q2 Q2' eq2 s; split; intros H;
+        (destruct H; [left; apply eq1; assumption | right; apply eq2; assumption]).
+    Qed.
+
+    #+END_SRC
+

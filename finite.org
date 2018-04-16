@@ -1,0 +1,94 @@
+Notes inspired from /Constructively Finite?/ by Coquand and Spiwack
+http://assert-false.net/arnaud/papers/Constructively%20Finite.pdf
+
+Set theory, ZFC for instance, defines a seemingly non-ambiguous notion of 
+finite set. Reinforcing this feeling, any set is deemed as finite, or infinite.
+
+This paper highlights that if any set is finite in ZFC's sense, they are not all so 
+for the same reason. In particular does constructivist mathematics allow us to define
+several non-equivalent notions of finiteness of sets, of which we consider four.
+
+Their relative strengthes and closure properties are studied.
+
+* Enumerated sets
+
+  A set /A/ is said to be /enumerated/ when there is a list of all its elements. 
+  Notation: /A/ ∈ /F/.
+
+** Properties
+
+*** Decidability of being inhabited
+
+*** ∀ /A/ ∈ /F/, P ∈ (A → /B/), {x | P x} ∈ F
+
+    This fundamentally rests on P being decidable.
+    It does not hold for any P ∈ (A → Prop).
+    In particular, it does not hold for any f∈ B → A injective,
+    i.e. /F/ is not stable under arbitrary subsets.
+    
+*** ∀ /A/ ∈ /F/, f ∈ A → B surjective, then /B/ ∈ /F/
+  
+    if /l/ is an enumeration of /A/, /f l/ is an enumeration of /B/ by virtue
+    of surjectivity of /f/.
+    
+*** ∀ /A/, /B/ ∈ /F/, /A × B/ ∈ /F/ and /A + B/ ∈ /F/
+
+    Binary list comprehension and appending lists respectively.
+
+* Bounded size sets
+
+  A set /A/ is said to have /bounded size/ if there is a natural number /N/ such that
+  any list /l/ ∈ L(A) such that |l| > N has duplicates.
+  Notation: /A/ ∈ /B/
+
+  Remark: does not give a way to chose an element in /A/.
+
+** Relation to /F/
+   /F/ ⊆ /B/, the converse is false.
+   
+   For the inclusion, takes the size of the list associated to an enumererated
+   set and conclude by the pigneon hole principle.
+  
+   For the converse, observe that /B/ is stable by arbitrary subset (particular
+   case of next lemma). Since /F/ is not, since a non-computable injection into
+   itself does not lead to /F/, we conclude.
+
+** Properties
+
+*** ∀ /A/ ∈ /B/, f: /B/ → /A/ injective, /B/ ∈ /B/
+
+    By injectivity, duplicates in /f l/ entails duplicates in /l/
+
+*** ∀ /A/ ∈ /B/, f: /A/ → /B/ surjective, /B/ ∈ /B/
+
+    Let /N/ be A's bound and /l/ ∈ L(B) such that /N < |l|/.
+    By surjectivity, ∃ /l'/ such that /l = f l'/.
+    /|l'|=|l|>N/ hence |l'| has duplicates, hence the result.
+
+*** ∀ /A/, /B/ ∈ /B/, /A × B/ ∈ /F/ and /A + B/ ∈ /B/
+
+* Noetherian sets
+
+  Let /A/ be a set. For any /l/ ∈ L(A), we define inductively N(l) as follows:
+  * If /l/ has duplicates, then /A/ ∈ N(l)
+  * If ∀ /a/ ∈ A, A ∈ N(a::l), then /A/ ∈ N(l)
+  /A/ is said to be noetherian if ∀ /l/, /A/ ∈ N(l), or equivalently A∈N([])
+  Notation: /A/ ∈ /N/
+
+** Relation to /B/
+   /B/ ⊆ /N/, the converse is false
+
+* Streamless sets
+
+  /A/ is said to be streamless if any stream of elements of /A/ admits duplicates.
+  Notation: /A/ ∈ /S/
+
+** Relation to /N/
+   /N/ ⊆ /S/
+   The converse is conjectured to be false.
+  
+** Properties 
+
+*** ∀ /A/, /B/ ∈ /B/, /A + B/ ∈ /B/
+
+*** Whether streamless sets are closed under cartesian product is open

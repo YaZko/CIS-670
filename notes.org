@@ -44,7 +44,7 @@
    This kind of theory is usually built upon partial orders. However, in order to
    leverage Coq's /setoid rewrite/ facility, we work over preorder instead.
 
-*** Explainations
+*** Explanations
     
     A /preorder/ is a type equipped with a reflexive, transitive relation (i.e.
     not necessarily symmetric, in contrast with the case of /partial orders/).
@@ -55,7 +55,7 @@
     relation. The mathematical usual pendant, quotients, are not natively
     supported.
 
-    Remains to see two things: one, the relation between preoders and setoids;
+    Remains to address two things: one, the relation between preoders and setoids;
     two, how to recover the partial order that we really are concerned with.
 
     Given a preoder, we can easily derive a setoid: two elements are equivalent
@@ -224,7 +224,7 @@
 
     However, now that we have identified these equivalent elements, we get 
     back antisymmetry, and hence a partial order.
-
+    
 *** Effective preorder
 
     A preorder is said to be effective if it comes with an enumerable set
