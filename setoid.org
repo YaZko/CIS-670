@@ -48,7 +48,6 @@
     Meaning that this equality is compatible with /any/ context, we therefore
     can always rewrite such an equality in our proof term.
    
-
 *** Beyond Leibniz: extending Coq's facilities related to /eq/
 
     What if we want to identify other terms? One solution is to wait for the
@@ -79,14 +78,14 @@
    as R_is_an_equivalence_relation.
    #+END_SRC
 
-   And here is an example:
+   And here is an example (which is kinda bad since it is not parametric):
    #+BEGIN_SRC coq
    Axiom state: Type.
    Definition Pred: state -> Prop.
    Definition PEq (P1 P2: Pred): Prop := forall x, P1 x <-> P2 x.
    Lemma PEq_reflexive: forall P, P ≡ P.
    Proof.
-     intros P s; go.
+     intros P s; auto.
    Qed.
 
    Lemma PEq_trans: forall P1 P2 P3 (H1: P1 ≡ P2) (H2: P2 ≡ P3),
@@ -111,7 +110,8 @@
    simpl (~intros P; reflexivity~). Same goes for ~transitivity~ and ~symmetry~.
 
    Note that we can also only declare some of those properties, declaring that a
-   relation is a preorder for instance:
+   relation is a preorder for instance (or simply ommiting some of the proofs in the
+   previous declaration):
 
    #+BEGIN_SRC coq
    Definition PWeaker (P1 P2: Pred): Prop := forall s, P2 s -> P1 s.

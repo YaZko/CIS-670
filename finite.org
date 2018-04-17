@@ -19,7 +19,7 @@ Their relative strengthes and closure properties are studied.
 
 *** Decidability of being inhabited
 
-*** ∀ /A/ ∈ /F/, P ∈ (A → /B/), {x | P x} ∈ F
+*** ∀ /A/ ∈ /F/, P ∈ (A → /Boolean/), {x | P x} ∈ F
 
     This fundamentally rests on P being decidable.
     It does not hold for any P ∈ (A → Prop).
@@ -92,3 +92,4 @@ Their relative strengthes and closure properties are studied.
 *** ∀ /A/, /B/ ∈ /B/, /A + B/ ∈ /B/
 
 *** Whether streamless sets are closed under cartesian product is open
+    

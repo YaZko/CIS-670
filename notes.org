@@ -197,6 +197,7 @@
    -> Effectiveness
 *** Recursive function theory for free
     Developping an effective theory means that we can inherit Coq's support for recursive functions
+
 ** Preorder vs Partial Order (Yannick)
   
    -> Deriving a partial order from preorder
@@ -259,6 +260,7 @@
 
    The whole development works exclusively over these enumerable sets, which
    is instrumental in achieving effectiveness.
+
 ** Canonical structures vs Type classes vs Modules (Yao)
    Dockins uses canonical structures. Could be interesting to cover these notions.
    Related: use of coercions
